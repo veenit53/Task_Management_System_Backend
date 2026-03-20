@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema(
         minlength: 2,
       },
     },
-
     username: {
       type: String,
       required: true,
@@ -25,7 +24,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: 3,
     },
-
     email: {
       type: String,
       required: true,
@@ -34,61 +32,46 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email"],
     },
-
     password: {
       type: String,
       required: true,
       minlength: 6,
-      select: false, // 🔥 hide password by default
+      select: false,
     },
-
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user",
     },
-
     refreshToken: {
       type: String,
       default: "",
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-
 // 🔐 HASH PASSWORD BEFORE SAVE
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
-
 
 // 🔑 CHECK PASSWORD
 userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-
-// 🔥 GENERATE ACCESS TOKEN (MAIN TOKEN YOU USE)
+// 🔥 GENERATE ACCESS TOKEN
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
-    {
-      _id: this._id,
-      role: this.role,
-      email: this.email,
-    },
+    { _id: this._id, role: this.role, email: this.email },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
 };
 
-
-// 🔄 OPTIONAL REFRESH TOKEN (ADVANCED, can ignore if not needed)
+// 🔄 REFRESH TOKEN
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     { _id: this._id },
@@ -97,7 +80,5 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-
 const User = mongoose.model("User", userSchema);
-
 module.exports = User;

@@ -36,7 +36,7 @@ const taskRoutes = require("./routes/user/task.routes");
 
 
 //use routes
-app.use("/", authRoutes);
+app.use("/users", authRoutes);
 app.use("/tasks", taskRoutes);
 
 app.get('/', (req, res) => {
