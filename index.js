@@ -21,8 +21,9 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use(cors({
-  origin: "http://localhost:5173", // React frontend origin
+  origin: ["http://localhost:5173", "https://task-management-system-efjx.vercel.app"],
   credentials: true,
 }));
 
