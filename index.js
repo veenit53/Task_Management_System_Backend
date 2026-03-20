@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://task-management-system-efjx.vercel.app"],
+  origin: ["http://localhost:5173", "https://task-management-system-efjx.vercel.app","https://task-management-system-ao1y.vercel.app","https://task-management-system-phi-one.vercel.app","https://task-management-system-ex3s.vercel.app","https://task-management-system-n6zv.vercel.app"],
   credentials: true,
 }));
 
